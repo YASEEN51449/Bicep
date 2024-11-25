@@ -188,6 +188,25 @@
     
     az deployment sub create --location southeastasia --name 'xxxxxxxx-yyyyy-xxxx-xxxx-xxxxxxxxxxxx' --template-file .\subscopemodscript.bicep
 
+# 8.vnet.bicep
+
+    resource vnet 'Microsoft.Network/virtualNetworks@2024-03-01'={
+      name:'devnet'
+      location:resourceGroup().location
+      properties:{
+        addressSpace:{
+          addressPrefixes:[
+          '10.0.0.0/21'
+          ]
+        }
+      }
+    }
+
+**vnetdeployment**
+
+    az deployment group create -g Demo1 -f vnet.bicep
+
+
 
 
 
