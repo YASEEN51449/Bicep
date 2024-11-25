@@ -79,7 +79,7 @@
     }
     ]
 
-*********for loop deployment**
+**for loop deployment**
     
     az group create -g Demo1 -l westus3
     az deployment group create -g Demo1 -f forloop.bicep
