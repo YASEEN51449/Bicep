@@ -10,7 +10,8 @@
      properties:{
       accessTier:'Hot'
      } 
-  }
-
-// az group create -g Demo1 -l westus3
-// az deployment group create -g Demo1 -f storage.bicep
+      }
+**************************************Deployment *****************
+        
+    az group create -g Demo1 -l westus3
+    az deployment group create -g Demo1 -f storage.bicep
