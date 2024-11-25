@@ -119,10 +119,37 @@
        } 
     }
 
-
-**for loop deployment**
+**if deployment**
 
      az group create -g Demo1 -l westus3
      az deployment group create -g Demo1 -f if.bicep
 
+# 6[a] storagemod.bicep
+
+    @minLength(3)
+    param storageName string
+    resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+      name: storageName
+      location: 'westus3'
+      sku: {
+        name: 'Standard_LRS'
+      }
+      kind:'StorageV2'
+       properties:{
+        accessTier:'Hot'
+       } 
+    }
+    output storageEndpoint object = storageAccount.properties.primaryEndpoints
+
+# 6[b] stormodscript.bicep
+
+    module storageModule 'storagemod.bicep'={
+      name:'storageModule'
+      params:{
+        storageName:'modulestore1'}
+    }
+
+**Module Deployment**
+    
+    az deployment group create -g Demo1 -f stormodscript.bicep
 
