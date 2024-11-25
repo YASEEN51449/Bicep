@@ -11,7 +11,8 @@
       accessTier:'Hot'
      } 
       }
-**************************************Deployment *****************
+      
+**Deployment**
         
     az group create -g Demo1 -l westus3
     az deployment group create -g Demo1 -f storage.bicep
@@ -30,7 +31,7 @@
     accessTier:'Hot'
     } 
     }
-******************* VarStorage.bicep Deployment ***********************
+**VarStorage.bicep Deployment**
         
     az group create -g Demo1 -l westus3
     az deployment group create -g Demo1 -f var.bicep
@@ -51,7 +52,7 @@
        } 
     }
 
-********************************************interpolvar.bicep************
+**interpolvar.bicep**
         
     az group create -g Demo1 -l westus3
     az deployment group create -g Demo1 -f interpolvar.bicep
