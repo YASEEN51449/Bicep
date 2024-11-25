@@ -1,4 +1,4 @@
-#Storage.bicep
+# 1.Storage.bicep
 
     resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
     name: 'storagebcp1'
