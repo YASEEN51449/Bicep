@@ -152,4 +152,42 @@
 **Module Deployment**
     
     az deployment group create -g Demo1 -f stormodscript.bicep
+    
+# 7[a].substoremod.bicep
+
+    @minLength(3)
+    param storageName string
+    resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+      name: storageName
+      location: 'westus3'
+      sku: {
+        name: 'Standard_LRS'
+      }
+      kind:'StorageV2'
+       properties:{
+        accessTier:'Hot'
+       } 
+    }
+    output storageEndpoint object = storageAccount.properties.primaryEndpoints
+
+# 7[b].subscopemodscript.bicep
+
+    targetScope = 'subscription'
+    var rgName ='DeployedFromDemo1'
+    resource myNewGroup 'Microsoft.Resources/resourceGroups@2024-07-01'={
+      name: rgName
+    location:'southeastasia'}
+
+    module storageModule 'substoremod.bicep'={
+      name:'storageModule'
+      scope:resourceGroup(myNewGroup.name)
+      params:{
+        storageName:'submodulestore1'}    
+    }
+**Module subscription scope Deployment**
+    
+    az deployment sub create --location southeastasia --name 'xxxxxxxx-yyyyy-xxxx-xxxx-xxxxxxxxxxxx' --template-file .\subscopemodscript.bicep
+
+
+
 
