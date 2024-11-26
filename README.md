@@ -206,7 +206,7 @@
 
     az deployment group create -g Demo1 -f vnet.bicep
 
-
+**vn**
 
 
 
