@@ -1,3 +1,59 @@
+Create the project folder and navigate to it:
+
+mkdir bicep_proj
+cd bicep_proj
+
+Initialize a new Git repository:
+
+git init
+Check the status of the repository:
+
+git status
+
+Add your project files (you can specify files or . for all files):
+
+git add .
+
+Check the status again to confirm files are staged:
+
+git status
+
+Commit the files with an initial message:
+
+git commit -m "Initial commit with files"
+
+Add a remote repository (assuming you've already created it on GitHub):
+
+git remote add origin https://github.com/YASEEN51449/Bicep.git
+
+Check remote URL to verify the connection:
+
+git remote -v
+
+Push the local repository to the remote (GitHub):
+
+git push origin main
+
+If you get an error here, you may need to pull first:
+
+git pull origin main --allow-unrelated-histories
+
+After pulling changes, re-add your changes and commit them:
+
+git add .
+git commit -m "Updated README.md"
+
+Push the updates to the remote repository again:
+
+git push origin main
+Check the status to make sure everything is up-to-date:
+
+git status
+
+If you need to check command history, use:
+
+doskey /history
+
 # 1.Storage.bicep
 
     resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
