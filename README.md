@@ -1,58 +1,58 @@
-Create the project folder and navigate to it:
+# Create the project folder and navigate to it:
 
-mkdir bicep_proj
-cd bicep_proj
+    mkdir bicep_proj
+    cd bicep_proj
 
-Initialize a new Git repository:
+# Initialize a new Git repository:
 
-git init
-Check the status of the repository:
+    git init
+# Check the status of the repository:
 
-git status
+    git status
 
-Add your project files (you can specify files or . for all files):
+# Add your project files (you can specify files or . for all files):
 
-git add .
+    git add .
 
-Check the status again to confirm files are staged:
+# Check the status again to confirm files are staged:
 
-git status
+    git status
 
-Commit the files with an initial message:
+# Commit the files with an initial message:
 
-git commit -m "Initial commit with files"
+    git commit -m "Initial commit with files"
 
-Add a remote repository (assuming you've already created it on GitHub):
+# Add a remote repository (assuming you've already created it on GitHub):
 
-git remote add origin https://github.com/YASEEN51449/Bicep.git
+    git remote add origin https://github.com/YASEEN51449/Bicep.git
 
-Check remote URL to verify the connection:
+# Check remote URL to verify the connection:
 
-git remote -v
+    git remote -v
 
-Push the local repository to the remote (GitHub):
+# Push the local repository to the remote (GitHub):
 
-git push origin main
+    git push origin main
 
-If you get an error here, you may need to pull first:
+# If you get an error here, you may need to pull first:
 
-git pull origin main --allow-unrelated-histories
+    git pull origin main --allow-unrelated-histories
 
-After pulling changes, re-add your changes and commit them:
+# After pulling changes, re-add your changes and commit them:
 
-git add .
-git commit -m "Updated README.md"
+    git add .
+    git commit -m "Updated README.md"
 
-Push the updates to the remote repository again:
+# Push the updates to the remote repository again:
 
-git push origin main
-Check the status to make sure everything is up-to-date:
+    git push origin main
+# Check the status to make sure everything is up-to-date:
 
-git status
+    git status
 
-If you need to check command history, use:
+# If you need to check command history, use:
 
-doskey /history
+    doskey /history
 
 # 1.Storage.bicep
 
