@@ -260,6 +260,203 @@
 
 **vnetdeployment**
 
+
+
+
+
+
+
+
+
+
+
+📊  Dashboard 📊
+
+
+
+1. X Success Metrics
+
+
+requests
+| where name contains "X"
+    and operation_Name contains "Y"
+    and name contains "POST"
+| summarize
+    TotalRequests = count(),
+    SuccessCount = countif(resultCode == 200),
+    FailureCount = countif(resultCode != 200),
+    ['Success %'] = round((countif(resultCode == 200) * 100.0) / count(), 2),
+    ['Failure %'] = round((countif(resultCode != 200) * 100.0) / count(), 2)
+    by bin(timestamp, 1d)
+| extend Year = format_datetime(timestamp, 'yyyy')
+| extend TimestampFormatted = format_datetime(timestamp, 'yyyy-MM-dd')  // Format timestamp for sorting
+| project
+    ['Date (yyyy-MM-dd)'] = TimestampFormatted,  // Rename Timestamp for better understanding
+    TotalRequests,
+    SuccessCount,
+    FailureCount,
+    ['Success %'],
+    ['Failure %']
+| union (
+    // Calculate total counts in the union query
+    requests
+    | where name contains "X" and name contains "POST" and operation_Name contains "Y"
+    | summarize
+        TotalRequests = count(),
+        SuccessCount = countif(resultCode == 200),
+        FailureCount = countif(resultCode != 200)
+    | extend
+        ['Success %'] = round((SuccessCount * 100.0) / TotalRequests, 2),
+        ['Failure %'] = round((FailureCount * 100.0) / TotalRequests, 2)
+    | project
+        ['Date (yyyy-MM-dd)'] = "Total",  // Label the total row
+        TotalRequests,
+        SuccessCount,
+        FailureCount,
+        ['Success %'],
+        ['Failure %']
+    )
+| order by ['Date (yyyy-MM-dd)'] desc  // Sort results by the renamed Date column (descending order)
+
+
+
+
+2. Response Time
+
+requests
+| where name contains "X" and operation_Name contains "Y"
+and name contains "POST"
+| summarize
+    TotalRequests = count(),
+    ['Response <= 5s'] = countif(duration <= 5000),
+    ['Response > 5s <= 10s'] = countif(duration > 5000 and duration <= 10000),
+    ['Response > 10s <= 15s'] = countif(duration > 10000 and duration <= 15000),
+    ['Response > 15s <= 20s'] = countif(duration > 15000 and duration <= 20000),
+    ['Response > 20s <= 25s'] = countif(duration > 20000 and duration <= 25000),
+    ['Response > 25s <= 30s'] = countif(duration > 25000 and duration <= 30000),
+    ['Response > 30s'] = countif(duration > 30000)
+by bin(timestamp, 1d)
+| extend Year = format_datetime(timestamp, 'yyyy')
+| extend TimestampFormatted = format_datetime(timestamp, 'yyyy-MM-dd')  // Format timestamp for sorting
+| project
+    ['Date (yyyy-MM-dd)'] = TimestampFormatted,  // Rename Timestamp for better understanding
+    TotalRequests,  // Include total requests column
+    ['Response <= 5s'],
+    ['Response > 5s <= 10s'],
+    ['Response > 10s <= 15s'],
+    ['Response > 15s <= 20s'],
+    ['Response > 20s <= 25s'],
+    ['Response > 25s <= 30s'],
+    ['Response > 30s']
+| union (
+    // Calculate total response time categories and total requests in the union query
+    requests
+    | where name contains "X"
+    | summarize
+        TotalRequests = count(),
+        ['Response <= 5s'] = countif(duration <= 5000),
+        ['Response > 5s <= 10s'] = countif(duration > 5000 and duration <= 10000),
+        ['Response > 10s <= 15s'] = countif(duration > 10000 and duration <= 15000),
+        ['Response > 15s <= 20s'] = countif(duration > 15000 and duration <= 20000),
+        ['Response > 20s <= 25s'] = countif(duration > 20000 and duration <= 25000),
+        ['Response > 25s <= 30s'] = countif(duration > 25000 and duration <= 30000),
+        ['Response > 30s'] = countif(duration > 30000)
+    | project
+        ['Date (yyyy-MM-dd)'] = "Total",  // Label the total row
+        TotalRequests,  // Include total requests column
+        ['Response <= 5s'],
+        ['Response > 5s <= 10s'],
+        ['Response > 10s <= 15s'],
+        ['Response > 15s <= 20s'],
+        ['Response > 20s <= 25s'],
+        ['Response > 25s <= 30s'],
+        ['Response > 30s']
+)
+| order by ['Date (yyyy-MM-dd)'] desc  // Sort results by the renamed Date column (descending order)
+
+
+
+3.A
+
+requests
+| where name contains "X" and operation_Name contains "Y"
+and name contains "POST"
+| where tostring(customDimensions["Subscription Name"]) == "A"  // Filter for acuity-insurance
+| summarize
+    TotalRequests = count(),
+    SuccessCount = countif(resultCode == 200),
+    FailureCount = countif(resultCode != 200),
+    ['Success %'] = round((countif(resultCode == 200) * 100.0) / count(), 2),
+    ['Failure %'] = round((countif(resultCode != 200) * 100.0) / count(), 2),
+    ['Response <= 5s'] = countif(duration <= 5000),
+    ['Response > 5s <= 10s'] = countif(duration > 5000 and duration <= 10000),
+    ['Response > 10s <= 15s'] = countif(duration > 10000 and duration <= 15000),
+    ['Response > 15s <= 20s'] = countif(duration > 15000 and duration <= 20000),
+    ['Response > 20s <= 25s'] = countif(duration > 20000 and duration <= 25000),
+    ['Response > 25s <= 30s'] = countif(duration > 25000 and duration <= 30000),
+    ['Response > 30s'] = countif(duration > 30000)
+by bin(timestamp, 1d)
+| extend TimestampFormatted = format_datetime(timestamp, 'yyyy-MM-dd')
+| project
+    ['Date (yyyy-MM-dd)'] = TimestampFormatted,
+    TotalRequests,
+    SuccessCount,
+    FailureCount,
+    ['Success %'],
+    ['Failure %'],
+    ['Response <= 5s'],
+    ['Response > 5s <= 10s'],
+    ['Response > 10s <= 15s'],
+    ['Response > 15s <= 20s'],
+    ['Response > 20s <= 25s'],
+    ['Response > 25s <= 30s'],
+    ['Response > 30s']
+| order by ['Date (yyyy-MM-dd)'] desc
+
+
+
+
+
+
+
+
+
+
+
+
+4.Subscription-wise mETRICS
+
+requests
+| where name contains "X" and operation_Name contains "Y"
+and name contains "POST"
+| extend SubscriptionName = tostring(customDimensions["Subscription Name"])  // Extract Subscription Name
+| summarize
+    TotalRequests = count(),
+    SuccessCount = countif(resultCode == 200),
+    FailureCount = countif(resultCode != 200),
+    ['Success %'] = round((countif(resultCode == 200) * 100.0) / count(), 2),
+    ['Failure %'] = round((countif(resultCode != 200) * 100.0) / count(), 2)
+by SubscriptionName, bin(timestamp, 1d)
+| extend Year = format_datetime(timestamp, 'yyyy')
+| extend TimestampFormatted = format_datetime(timestamp, 'yyyy-MM-dd')
+| project
+    ['Date (yyyy-MM-dd)'] = TimestampFormatted,
+    SubscriptionName,  // Keep the subscription name visible for filtering
+    TotalRequests,
+    SuccessCount,
+    FailureCount,
+    ['Success %'],
+    ['Failure %']
+| order by ['Date (yyyy-MM-dd)'] desc
+| render columnchart 
+
+
+
+
+
+
+
+
     az deployment group create -g Demo1 -f vnet.bicep
 
 **vn**
